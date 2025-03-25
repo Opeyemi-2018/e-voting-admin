@@ -30,14 +30,14 @@ const SignIn = () => {
                 <label>Email</label>
                 <input
                   type="email"
-                  className="border-gray-300 border p-2 rounded-md"
+                  className="border-gray-300 border p-2 rounded-md outline-none"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <label>Passowrd</label>
                 <input
                   type="password"
-                  className="border-gray-300 border p-2 rounded-md"
+                  className="border-gray-300 border p-2 rounded-md outline-none"
                 />
               </div>
               <button
@@ -63,14 +63,14 @@ const SignIn = () => {
                 <label>Email</label>
                 <input
                   type="email"
-                  className="border-gray-300 border p-2 rounded-md"
+                  className="border-gray-300 border p-2 rounded-md outline-none"
                 />
               </div>
               <div className="flex flex-col gap-1">
                 <label>Passowrd</label>
                 <input
                   type="password"
-                  className="border-gray-300 border p-2 rounded-md"
+                  className="border-gray-300 border p-2 rounded-md outline-none"
                 />
               </div>
               <button
