@@ -1,5 +1,6 @@
 "use client";
 import { MdHowToVote } from "react-icons/md";
+import { PiSignOut } from "react-icons/pi";
 
 import { usePathname, useRouter } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
@@ -7,10 +8,30 @@ import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { MdManageHistory } from "react-icons/md";
 import { MdOutlineFormatListNumberedRtl } from "react-icons/md";
 import { CiSettings } from "react-icons/ci";
+import axios from "axios";
+import { useAuth } from "@/app/context/authContext";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Sidebar = () => {
   const pathName = usePathname();
   const router = useRouter();
+  const {logout} = useAuth()
+
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/auth/sign-out")
+      if (res.status === 200) {
+        logout();
+        router.push("/");
+      } else {
+        toast.error("Sign out failed");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.msg || "sign out failed");
+    }
+  }
 
   const routes = [
     { id: 1, name: "overview", icon: <LuLayoutDashboard />, path: "/admin" },
@@ -35,9 +56,9 @@ const Sidebar = () => {
     { id: 5, name: "setting", icon: <CiSettings />, path: "/admin/setting" },
   ];
   return (
-    <div className=" h-screen w-[250px] max-w-[250px]  min-h-full fixed top-0 bg-[#e57226] ">
-      <div className="flex items-center justify-center gap-8 flex-col">
-        <div className="flex items-center gap-3 mt-12">
+    <div className=" h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#e57226] ">
+      <div className="flex flex-col gap-10">
+        <div className="flex items-center gap-3 ">
           <MdHowToVote size={30} color="white" />
           <h1 className="text-white font-bold text-2xl">E-Voting</h1>
         </div>
@@ -57,6 +78,10 @@ const Sidebar = () => {
             </li>
           ))}
         </ul>
+      </div>
+      <div onClick={handleSignOut} className="flex items-center gap-3  text-white capitalize cursor-pointer hover:bg-[#443227] hover:text-white px-4 p-2 rounded-md transition-all duration-300 delay-150">
+        <PiSignOut className="text-2xl" />
+        <button>sign out</button>
       </div>
     </div>
   );

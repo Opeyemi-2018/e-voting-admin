@@ -6,8 +6,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { ClipLoader } from "react-spinners";
-
 import axios from "axios";
+import { useAuth } from "@/app/context/authContext";
 
 const SignIn = () => {
   const [showSignIn, setShowSignIn] = useState(false);
@@ -15,6 +15,8 @@ const SignIn = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
   // console.log(formData);
+
+  const { login } = useAuth();
 
   const router = useRouter();
 
@@ -26,25 +28,47 @@ const SignIn = () => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
       toast.error("all fields are required");
-      return
+      return;
     }
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:5000/api/auth/sign-up", formData);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/sign-up",
+        formData
+      );
       toast.success(res.data.msg);
       setShowSignIn(true);
       setLoading(false);
     } catch (error) {
-      console.error("Sign up error:", error.response?.data); // Log full error details
+      console.error("Sign up error:", error.response?.data);
       toast.error(error.response?.data?.msg || "Sign up failed");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    router.push("/admin");
+    if (!formData.email || !formData.password) {
+      toast.error("all fields are require");
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/sign-in",
+        formData
+      );
+      const { token, user } = res.data;
+      login({ token, user });
+      toast.success("successfully logged in");
+      router.push("/admin");
+    } catch (error) {
+      console.log(error.response?.data);
+      toast.error(error.response?.data?.msg || "sign in failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -131,6 +155,8 @@ const SignIn = () => {
                 <label>Email</label>
                 <input
                   type="email"
+                  name="email"
+                  value={formData.email} onChange={handleChange}
                   className="border-gray-300 border p-2 rounded-md outline-none"
                 />
               </div>
@@ -138,6 +164,8 @@ const SignIn = () => {
                 <label>Passowrd</label>
                 <input
                   type="password"
+                  name="password"
+                  value={formData.password} onChange={handleChange}
                   className="border-gray-300 border p-2 rounded-md outline-none"
                 />
               </div>
@@ -145,7 +173,13 @@ const SignIn = () => {
                 onClick={handleSignIn}
                 className="bg-[#e57226] uppercase text-white p-3 rounded-md w-full"
               >
-                sign in
+                {loading ? (
+                  <div className="spinner  flex items-center justify-center">
+                    <ClipLoader color="white" size={25} loading={loading} />
+                  </div>
+                ) : (
+                  "Sign In"
+                )}
               </button>
             </form>
           </div>
