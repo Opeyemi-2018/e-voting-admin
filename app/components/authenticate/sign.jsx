@@ -14,7 +14,6 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
-  // console.log(formData);
 
   const { login } = useAuth();
 
@@ -24,6 +23,7 @@ const SignIn = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
@@ -39,6 +39,7 @@ const SignIn = () => {
       toast.success(res.data.msg);
       setShowSignIn(true);
       setLoading(false);
+      setFormData({ email: "", password: "" });
     } catch (error) {
       console.error("Sign up error:", error.response?.data);
       toast.error(error.response?.data?.msg || "Sign up failed");
@@ -79,8 +80,61 @@ const SignIn = () => {
           autoClose={3000}
           toastClassName="w-[250px] text-center"
         />
-        {/* sign up */}
+        {/* sign in */}
         {!showSignIn && (
+          <div className="max-w-[600px] mx-auto ">
+            <h1 className="text-[#443227] font-semibold text-2xl capitalize text-center mt-8 mb-5">
+              sign in
+            </h1>
+            <form className=" bg-white p-8 flex flex-col  justify-center gap-6 rounded-md shadow-sm">
+              <div className="flex flex-col gap-1">
+                <label>Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="border-gray-300 border p-2 rounded-md outline-none"
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label>Passowrd</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="border-gray-300 border p-2 rounded-md outline-none"
+                />
+              </div>
+              <button
+                onClick={handleSignIn}
+                className="bg-[#e57226] uppercase text-white p-3 rounded-md w-full"
+              >
+                {loading ? (
+                  <div className="spinner  flex items-center justify-center">
+                    <ClipLoader color="white" size={25} loading={loading} />
+                  </div>
+                ) : (
+                  "Sign In"
+                )}
+              </button>
+              <div className="capitalize">
+                dont have an account{" "}
+                <button
+                  type="button"
+                  onClick={() => setShowSignIn(!showSignIn)}
+                  className="text-[#e57226]"
+                >
+                  Sign Up
+                </button>{" "}
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* sign up  */}
+        {showSignIn && (
           <div className="max-w-[600px] mx-auto ">
             <h1 className="text-[#443227] font-semibold text-2xl capitalize text-center mt-8 mb-5">
               sign up
@@ -140,47 +194,6 @@ const SignIn = () => {
                   sign in
                 </button>{" "}
               </div>
-            </form>
-          </div>
-        )}
-
-        {/* sign in  */}
-        {showSignIn && (
-          <div className="max-w-[600px] mx-auto ">
-            <h1 className="text-[#443227] font-semibold text-2xl capitalize text-center mt-8 mb-5">
-              sign in
-            </h1>
-            <form className=" bg-white p-8 flex flex-col  justify-center gap-6 rounded-md shadow-sm">
-              <div className="flex flex-col gap-1">
-                <label>Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email} onChange={handleChange}
-                  className="border-gray-300 border p-2 rounded-md outline-none"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label>Passowrd</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={formData.password} onChange={handleChange}
-                  className="border-gray-300 border p-2 rounded-md outline-none"
-                />
-              </div>
-              <button
-                onClick={handleSignIn}
-                className="bg-[#e57226] uppercase text-white p-3 rounded-md w-full"
-              >
-                {loading ? (
-                  <div className="spinner  flex items-center justify-center">
-                    <ClipLoader color="white" size={25} loading={loading} />
-                  </div>
-                ) : (
-                  "Sign In"
-                )}
-              </button>
             </form>
           </div>
         )}
