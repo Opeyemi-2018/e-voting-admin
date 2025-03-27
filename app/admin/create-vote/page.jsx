@@ -4,34 +4,46 @@ import Modal from "@/app/components/modals";
 import Navbar from "@/app/components/navbar";
 import axios from "axios";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Page = () => {
   const [number, setNumber] = useState("");
   const [numbersList, setNumbersList] = useState([]);
-  const [message, setMessage] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleAddNumber = () => {
     if (!number.trim()) {
-      setMessage("❌ Please enter a number.");
+      toast.error("Please enter a number.");
       return;
     }
-
-    const formattedNumber = number.toUpperCase();
-
+    
+    const formattedNumber = number.trim().toUpperCase();
+    
     if (numbersList.includes(formattedNumber)) {
-      setMessage("❌ Number already added.");
+      toast.warning("This number is already in the list.");
       return;
     }
-
+    
+    if (!/^CSC\d+$/i.test(formattedNumber)) {
+      toast.error("Invalid format! Use CSC followed by numbers (e.g., CSC1)");
+      return;
+    }
+    
     setNumbersList([...numbersList, formattedNumber]);
     setNumber("");
-    setMessage("");
   };
 
-  const handleSubmit = () => {
+  const handleRemoveNumber = (index) => {
+    const newList = [...numbersList];
+    newList.splice(index, 1);
+    setNumbersList(newList);
+    toast.info("Number removed from list");
+  };
+
+  const handleSubmit = async () => {
     if (numbersList.length === 0) {
-      setMessage("❌ Please add at least one number.");
+      toast.error("Please add at least one number before submitting.");
       return;
     }
     setModalOpen(true);
@@ -39,82 +51,101 @@ const Page = () => {
 
   const handleConfirmSubmit = async () => {
     try {
-      let successCount = 0;
-      let errorCount = 0;
+      const response = await axios.post(
+        "http://localhost:5000/api/unique-number/generate-unique-number",
+        { uniqueNumbers: numbersList }
+      );
 
-      for (let num of numbersList) {
-        try {
-          const response = await axios.post("http://localhost:5000/api/unique-number/generate-unique-number", { uniqueNumber: num });
-          if (response.status === 201) successCount++;
-        } catch (error) {
-          errorCount++;
-        }
+      if (response.status === 201) {
+        toast.success(`${numbersList.length} number(s) saved successfully!`);
+        setNumbersList([]);
       }
-
-      if (successCount > 0) {
-        setMessage(`✅ ${successCount} numbers saved successfully!`);
-      }
-      if (errorCount > 0) {
-        setMessage(`⚠️ ${errorCount} numbers were already saved or had issues.`);
-      }
-
-      setNumbersList([]);
-      setModalOpen(false);
     } catch (error) {
-      setModalOpen(false);
-      setMessage("❌ Something went wrong.");
+      if (error.response) {
+        if (error.response.status === 400) {
+          toast.error(`${error.response.data.message || "One or more numbers already exist."}`);
+        } else {
+          toast.error(`Server error: ${error.response.status}`);
+        }
+      } else {
+        toast.error("Network error - could not connect to server");
+      }
     }
+    setModalOpen(false);
   };
 
   const handleCancelSubmit = () => {
+    toast.info("Submission cancelled");
     setModalOpen(false);
   };
 
   return (
     <div>
       <Navbar title="Create Vote" />
+      <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          toastClassName="w-[200px] text-center"
+        />
       <div className="flex justify-between md:flex-row flex-col gap-2 mt-10">
-        <div>Create Vote</div>
+        <div>Create Unique Number</div>
 
-        <div className="flex flex-col items-center p-6 min-h-screen">
-          <h1 className="font-semibold mb-4 capitalize">Generate and submit a unique voter ID</h1>
+        <div className="flex flex-col items-center p-6 min-h-screen px-3">
+          <div className="bg-white p-10 shadow-lg rounded-lg w-[400px]">
+            <h1 className="font-semibold mb-4 capitalize">Generate Unique Voter ID</h1>
 
-          <div className="bg-white p-6 shadow-lg rounded-lg w-80">
-            <input
-              type="text"
-              placeholder="Enter CSC number (e.g., CSC1)"
-              value={number}
-              onChange={(e) => setNumber(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mb-2"
-            />
-            <button
-              onClick={handleAddNumber}
-              className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 mb-4"
-            >
-              Add Number
-            </button>
+            <div className="flex gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="Enter CSC number (e.g., CSC1)"
+                value={number}
+                onChange={(e) => setNumber(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleAddNumber()}
+                className="flex-1 p-2 border border-gray-300 rounded"
+              />
+              <button
+                onClick={handleAddNumber}
+                className="bg-[#e57226] text-white px-4 py-2 rounded hover:bg-[#b68666]"
+              >
+                Add
+              </button>
+            </div>
 
-            <div className="border-t pt-3">
-              {numbersList.length > 0 && (
-                <ul className="mb-4">
+            {numbersList.length > 0 && (
+              <div className="mb-4 border border-gray-200 rounded p-3">
+                <h3 className="font-medium mb-2">
+                  Numbers to be submitted ({numbersList.length}):
+                </h3>
+                <ul className="space-y-2 max-h-60 overflow-y-auto">
                   {numbersList.map((num, index) => (
-                    <li key={index} className="text-gray-700 font-medium">
-                      {num}
+                    <li key={index} className="flex justify-between items-center">
+                      <span className="font-mono">{num}</span>
+                      <button
+                        onClick={() => handleRemoveNumber(index)}
+                        className="text-red-500 hover:text-red-700 text-sm"
+                      >
+                        Remove
+                      </button>
                     </li>
                   ))}
                 </ul>
-              )}
+              </div>
+            )}
 
-              <button
-                onClick={handleSubmit}
-                className="w-full bg-[#443227] text-white py-2 rounded hover:bg-[#755947]"
-              >
-                Submit Numbers
-              </button>
-            </div>
+            <button
+              onClick={handleSubmit}
+              className={`w-full py-2 rounded ${
+                numbersList.length === 0
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : "bg-[#443227] hover:bg-[#755947] text-white"
+              }`}
+              disabled={numbersList.length === 0}
+            >
+              {numbersList.length > 0 
+                ? `Submit ${numbersList.length} Number(s)`
+                : "Submit Numbers"}
+            </button>
           </div>
-
-          {message && <p className="mt-3 text-red-500">{message}</p>}
         </div>
       </div>
 
@@ -122,7 +153,8 @@ const Page = () => {
         isOpen={modalOpen}
         onClose={handleCancelSubmit}
         onProceed={handleConfirmSubmit}
-        title="Are you sure you want to submit?"
+        title={`Confirm Submission of ${numbersList.length} Number(s)`}
+        bodyText="Are you sure you want to submit these numbers?"
       />
     </div>
   );
