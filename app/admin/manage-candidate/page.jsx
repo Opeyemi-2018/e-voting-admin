@@ -8,6 +8,7 @@ import Overview from "@/app/components/overview";
 import Modal from "@/app/components/modals";
 import { RiDeleteBinLine, RiResetLeftLine } from "react-icons/ri";
 import { ClipLoader } from "react-spinners";
+import GetUniqueNumber from "@/app/components/getUniqueNumber";
 
 const ManageVote = () => {
   const [candidates, setCandidates] = useState([]);
@@ -15,6 +16,9 @@ const ManageVote = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  
+
+  // fetching candidate
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
@@ -71,11 +75,11 @@ const ManageVote = () => {
         ) : candidates.length === 0 ? (
           <p className="text-gray-500">No candidates found</p>
         ) : (
-          <div className="flex lg:flex-row flex-col gap-2">
+          <div className="flex lg:flex-row flex-col md:gap-2 gap-4">
             <div className="w-full">
               <div className="max-w-[700px]">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-semibold capitalize mb-4">
+                  <h2 className="text-2xl font-semibold capitalize mb-2">
                     Candidates
                   </h2>
                   <div className="flex gap-4 items-center">
@@ -110,14 +114,7 @@ const ManageVote = () => {
               </div>
             </div>
 
-            <div className="max-w-[300px]">
-              <div className="w-[300px]">
-                <h2 className="text-2xl font-semibold capitalize mb-8">
-                  verified voters ID
-                </h2>
-                <div className="bg-white p-6 rounded-md shadow-md">hhhhh</div>
-              </div>
-            </div>
+            <GetUniqueNumber/>
           </div>
         )}
       </div>

@@ -3,7 +3,7 @@ import Sidebar from "../components/sidebar"
 
 const AdminLayout = ({children}) => {
   return (
-    <section className=" mx-auto">
+    <section className=" mx-auto h-screen">
       <div className="hidden lg:block">
         <Sidebar />
       </div>
