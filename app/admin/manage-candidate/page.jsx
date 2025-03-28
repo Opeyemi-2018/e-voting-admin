@@ -9,7 +9,7 @@ import Modal from "@/app/components/modals";
 import { RiDeleteBinLine, RiResetLeftLine } from "react-icons/ri";
 import { ClipLoader } from "react-spinners";
 
-const Page = () => {
+const ManageVote = () => {
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -32,13 +32,11 @@ const Page = () => {
     fetchCandidates();
   }, []);
 
-  // Open modal and set candidate to delete
   const handleDeleteClick = (candidate) => {
     setSelectedCandidate(candidate);
     setIsModalOpen(true);
   };
 
-  // Confirm deletion
   const handleDeleteConfirm = async () => {
     if (!selectedCandidate) return;
 
@@ -94,7 +92,7 @@ const Page = () => {
             {candidates.map((candidate) => (
               <div
                 key={candidate._id}
-                className="flex capitalize justify-between"
+                className="flex capitalize justify-between shadow-md p-3"
               >
                 <p>{candidate.name}</p>
                 <p>{candidate.category}</p>
@@ -107,7 +105,6 @@ const Page = () => {
         )}
       </div>
 
-      {/* Confirmation Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -118,4 +115,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default ManageVote;

@@ -53,7 +53,7 @@ const CreateVote = () => {
       />
       <div className="bg-white p-10 shadow-lg rounded-lg max-w-[700px]">
         <h1 className="font-semibold  capitalize mb-4">Candidates</h1>
-        <form onSubmit={handleSubmit} className="mb-4  flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="mb-4  flex flex-col gap-4">
           <div className="flex  md:flex-row flex-col gap-2">
             <input
               type="text"
