@@ -60,19 +60,8 @@ const ManageVote = () => {
     <div>
       <Navbar title="manage vote" />
       <Overview />
-      <div className="py-6">
+      <div className="py-6 mt-8">
         <ToastContainer />
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold capitalize mb-4">Candidates</h2>
-          <div className="flex gap-4 items-center">
-            <button className="py-2 px-3 rounded-md bg-[#e57226] text-white">
-              Filter by
-            </button>
-            <button className="py-2 px-3 flex gap-3 items-center rounded-md bg-[#e57226] text-white">
-              Reset <RiResetLeftLine />
-            </button>
-          </div>
-        </div>
 
         {loading ? (
           <div className="spinner flex-col gap-6 flex items-center justify-center">
@@ -82,25 +71,53 @@ const ManageVote = () => {
         ) : candidates.length === 0 ? (
           <p className="text-gray-500">No candidates found</p>
         ) : (
-          <div className="max-w-[700px] bg-white p-6 rounded-md shadow-md">
-            <div className="flex justify-between capitalize py-4 font-semibold">
-              <p>Name</p>
-              <p>Category</p>
-              <p>Action</p>
+          <div className="flex lg:flex-row flex-col gap-2">
+            <div className="w-full">
+              <div className="max-w-[700px]">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-2xl font-semibold capitalize mb-4">
+                    Candidates
+                  </h2>
+                  <div className="flex gap-4 items-center">
+                    <button className="py-2 px-3 rounded-md bg-[#e57226] text-white">
+                      Filter by
+                    </button>
+                    <button className="py-2 px-3 flex gap-3 items-center rounded-md bg-[#e57226] text-white">
+                      Reset <RiResetLeftLine />
+                    </button>
+                  </div>
+                </div>
+                <div className=" bg-white p-6 rounded-md shadow-md">
+                  <div className="flex justify-between capitalize py-4 font-semibold">
+                    <p>Name</p>
+                    <p>Category</p>
+                    <p>Action</p>
+                  </div>
+
+                  {candidates.map((candidate) => (
+                    <div
+                      key={candidate._id}
+                      className="flex capitalize justify-between shadow-md p-3"
+                    >
+                      <p>{candidate.name}</p>
+                      <p>{candidate.category}</p>
+                      <button onClick={() => handleDeleteClick(candidate)}>
+                        <RiDeleteBinLine size={25} color="red" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            {candidates.map((candidate) => (
-              <div
-                key={candidate._id}
-                className="flex capitalize justify-between shadow-md p-3"
-              >
-                <p>{candidate.name}</p>
-                <p>{candidate.category}</p>
-                <button onClick={() => handleDeleteClick(candidate)}>
-                  <RiDeleteBinLine size={25} color="red" />
-                </button>
+            <div className="max-w-[300px]">
+              <div className="w-[300px]">
+                <h2 className="text-2xl font-semibold capitalize mb-8">
+                  verified voters ID
+                </h2>
+                <div className="bg-white p-6 rounded-md shadow-md">hhhhh</div>
               </div>
-            ))}
+            </div>
           </div>
         )}
       </div>
