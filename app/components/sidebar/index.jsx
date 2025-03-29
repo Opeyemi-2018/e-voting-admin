@@ -63,7 +63,7 @@ const Sidebar = () => {
     { id: 5, name: "setting", icon: <CiSettings />, path: "/admin/setting" },
   ];
   return (
-    <div className=" h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#e57226] ">
+    <div className=" h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#e57226]">
       <ToastContainer
         position="top-center"
         autoClose={3000}
