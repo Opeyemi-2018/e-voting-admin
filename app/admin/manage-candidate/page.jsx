@@ -16,8 +16,6 @@ const ManageVote = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  
-
   // fetching candidate
   useEffect(() => {
     const fetchCandidates = async () => {
@@ -67,38 +65,46 @@ const ManageVote = () => {
       <div className="py-6 mt-8">
         <ToastContainer />
 
-        {loading ? (
-          <div className="spinner flex-col gap-6 flex items-center justify-center">
+        {/* {loading ? ( */}
+        {/* <div className="spinner flex-col gap-6 flex items-center justify-center">
             <p>please wait while your data load</p>
             <ClipLoader color="#e57226" size={50} loading={loading} />
           </div>
         ) : candidates.length === 0 ? (
           <p className="text-gray-500">No candidates found</p>
-        ) : (
-          <div className="flex lg:flex-row flex-col md:gap-2 gap-4">
-            <div className="w-full">
-              <div className="max-w-[700px]">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-semibold capitalize mb-2">
-                    Candidates
-                  </h2>
-                  <div className="flex gap-4 items-center">
-                    <button className="py-2 px-3 rounded-md bg-[#e57226] text-white">
-                      Filter by
-                    </button>
-                    <button className="py-2 px-3 flex gap-3 items-center rounded-md bg-[#e57226] text-white">
-                      Reset <RiResetLeftLine />
-                    </button>
-                  </div>
+        ) : ( */}
+        <div className="flex lg:flex-row flex-col md:gap-2 gap-4">
+          <div className="w-full">
+            <div className="max-w-[700px]">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-2xl font-semibold capitalize mb-2">
+                  Candidates
+                </h2>
+                <div className="flex gap-4 items-center">
+                  <button className="py-2 px-3 rounded-md bg-[#e57226] text-white">
+                    Filter by
+                  </button>
+                  <button className="py-2 px-3 flex gap-3 items-center rounded-md bg-[#e57226] text-white">
+                    Reset <RiResetLeftLine />
+                  </button>
                 </div>
-                <div className=" bg-white p-6 rounded-md shadow-md">
-                  <div className="flex justify-between capitalize py-4 font-semibold">
-                    <p>Name</p>
-                    <p>Category</p>
-                    <p>Action</p>
-                  </div>
+              </div>
+              <div className=" bg-white p-6 rounded-md shadow-md">
+                <div className="flex justify-between capitalize py-4 font-semibold">
+                  <p>Name</p>
+                  <p>Category</p>
+                  <p>Action</p>
+                </div>
 
-                  {candidates.map((candidate) => (
+                {loading ? (
+                  <div className="spinner flex-col gap-6 flex items-center justify-center">
+                    <p>please wait while your data load</p>
+                    <ClipLoader color="#e57226" size={50} loading={loading} />
+                  </div>
+                ) : candidates.length === 0 ? (
+                  <p className="text-gray-500">No candidates found</p>
+                ) : (
+                  candidates.map((candidate) => (
                     <div
                       key={candidate._id}
                       className="flex capitalize justify-between shadow-md p-3"
@@ -109,14 +115,15 @@ const ManageVote = () => {
                         <RiDeleteBinLine size={25} color="red" />
                       </button>
                     </div>
-                  ))}
-                </div>
+                  ))
+                )}
               </div>
             </div>
-
-            <GetUniqueNumber/>
           </div>
-        )}
+
+          <GetUniqueNumber />
+        </div>
+        {/* )} */}
       </div>
 
       <Modal
