@@ -111,6 +111,7 @@ const ManageVote = () => {
                     >
                       <p>{candidate.name}</p>
                       <p>{candidate.category}</p>
+                      <p>{candidate.votes}</p>
                       <button onClick={() => handleDeleteClick(candidate)}>
                         <RiDeleteBinLine size={25} color="red" />
                       </button>
