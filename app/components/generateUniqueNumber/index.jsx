@@ -1,13 +1,15 @@
 "use client";
-import Modal from "@/app/components/modals";
-import axios from "axios";
 import { useState } from "react";
+import { Modal } from "antd";
+import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const UniqueNumber = () => {
   const [number, setNumber] = useState("");
   const [numbersList, setNumbersList] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const handleAddNumber = () => {
     if (!number.trim()) {
@@ -38,7 +40,7 @@ const UniqueNumber = () => {
     toast.info("Number removed from list");
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (numbersList.length === 0) {
       toast.error("Please add at least one number before submitting.");
       return;
@@ -47,6 +49,7 @@ const UniqueNumber = () => {
   };
 
   const handleConfirmSubmit = async () => {
+    setConfirmLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/unique-number/generate-unique-number",
@@ -59,40 +62,20 @@ const UniqueNumber = () => {
       }
     } catch (error) {
       if (error.response) {
-        if (error.response.status === 400) {
-          toast.error(
-            `${
-              error.response.data.message ||
-              "One or more numbers already exist."
-            }`
-          );
-        } else {
-          toast.error(`Server error: ${error.response.status}`);
-        }
+        toast.error(error.response.data.message || "Submission failed.");
       } else {
         toast.error("Network error - could not connect to server");
       }
     }
-    setModalOpen(false);
-  };
-
-  const handleCancelSubmit = () => {
-    toast.info("Submission cancelled");
+    setConfirmLoading(false);
     setModalOpen(false);
   };
 
   return (
     <div>
-      <ToastContainer
-        position="top-center"
-        autoClose={3000}
-        toastClassName="w-[200px] text-center"
-      />
+      <ToastContainer position="top-center" autoClose={3000} />
       <div className="bg-white p-10 shadow-lg rounded-lg max-w-[700px]">
-        <h1 className="font-semibold mb-4 capitalize">
-          Generate Unique Voter ID
-        </h1>
-
+        <h1 className="font-semibold mb-4 capitalize">Generate Unique Voter ID</h1>
         <div className="flex gap-2 mb-4">
           <input
             type="text"
@@ -112,9 +95,7 @@ const UniqueNumber = () => {
 
         {numbersList.length > 0 && (
           <div className="mb-4 border border-gray-200 rounded p-3">
-            <h3 className="font-medium mb-2">
-              Numbers to be submitted ({numbersList.length}):
-            </h3>
+            <h3 className="font-medium mb-2">Numbers to be submitted ({numbersList.length}):</h3>
             <ul className="space-y-2 max-h-60 overflow-y-auto">
               {numbersList.map((num, index) => (
                 <li key={index} className="flex justify-between items-center">
@@ -133,26 +114,25 @@ const UniqueNumber = () => {
 
         <button
           onClick={handleSubmit}
-          className={`w-full py-2 rounded text-white ${
-            numbersList.length === 0
-              ? "bg-[#443227] cursor-not-allowed"
-              : "bg-[#443227] hover:bg-[#755947] "
-          }`}
+          className={`w-full py-2 rounded text-white ${numbersList.length === 0 ? "bg-gray-400 cursor-not-allowed" : "bg-[#443227] hover:bg-[#755947]"}`}
           disabled={numbersList.length === 0}
         >
-          {numbersList.length > 0
-            ? `Submit ${numbersList.length} Number(s)`
-            : "Submit Numbers"}
+          Submit {numbersList.length > 0 ? `${numbersList.length} Number(s)` : "Numbers"}
         </button>
       </div>
 
+      {/* Ant Design Modal for Confirmation */}
       <Modal
-        isOpen={modalOpen}
-        onClose={handleCancelSubmit}
-        onProceed={handleConfirmSubmit}
         title={`Confirm Submission of ${numbersList.length} Number(s)`}
-        bodyText="Are you sure you want to submit these numbers?"
-      />
+        open={modalOpen}
+        onOk={handleConfirmSubmit}
+        confirmLoading={confirmLoading}
+        onCancel={() => setModalOpen(false)}
+        okText="Confirm"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to submit these numbers?</p>
+      </Modal>
     </div>
   );
 };

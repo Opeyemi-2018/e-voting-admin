@@ -1,17 +1,18 @@
 "use client";
 import { useEffect, useState } from "react";
-import Modal from "@/app/components/modals";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { ClipLoader } from "react-spinners";
 import axios from "axios";
+import { Modal, Button, Table, Spin } from "antd";
+import { RiDeleteBinLine } from "react-icons/ri";
 import { ToastContainer, toast } from "react-toastify";
+
 const GetUniqueNumber = () => {
   const [loading, setLoading] = useState(true);
   const [uniqueNumbers, setUniqueNumbers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState(null);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
-  //fetching unique number
+  // Fetching unique numbers
   useEffect(() => {
     const fetchUniqueNumbers = async () => {
       try {
@@ -29,7 +30,7 @@ const GetUniqueNumber = () => {
     fetchUniqueNumbers();
   }, []);
 
-  // deleting unique number
+  // Handle the delete confirmation modal
   const confirmDelete = (id) => {
     setSelectedNumber(id);
     setIsModalOpen(true);
@@ -39,6 +40,7 @@ const GetUniqueNumber = () => {
   const handleDeleteConfirm = async () => {
     if (!selectedNumber) return;
 
+    setConfirmLoading(true);
     try {
       await axios.delete(
         `http://localhost:5000/api/unique-number/delete-unique-number/${selectedNumber}`
@@ -46,58 +48,80 @@ const GetUniqueNumber = () => {
       setUniqueNumbers((prev) =>
         prev.filter((num) => num._id !== selectedNumber)
       );
-      toast.success("successfully deleted");
+      toast.success("Successfully deleted");
     } catch (err) {
-      console.error("Error deleting number:", err);
       toast.error("Failed to delete number");
     } finally {
+      setConfirmLoading(false);
       setIsModalOpen(false);
       setSelectedNumber(null);
     }
   };
+
+  // Ant Design Table Columns
+  const columns = [
+    {
+      title: "Voter ID",
+      dataIndex: "uniqueNumber",
+      key: "uniqueNumber",
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Button
+          style={{ backgroundColor: "red", borderColor: "red", color: "white" }}
+          type="button"
+          danger
+          icon={<RiDeleteBinLine />}
+          onClick={() => confirmDelete(record._id)}
+        />
+      ),
+    },
+  ];
+
   return (
     <div className="max-w-[300px]">
       <ToastContainer />
 
-      <div className="w-[300px]">
-        <h2 className="text-2xl font-semibold capitalize mb-4">
-          verified voters ID
+      <div className="w-full">
+        <h2 className="text-[22px] font-semibold capitalize mb-4">
+          Verified Voters ID
         </h2>
         <div className="bg-white p-6 rounded-md shadow-md">
-          <div>
-            <p className="font-medium">Total Count: {uniqueNumbers.length}</p>
-            <ul className="mt-3 space-y-2">
-              {loading ? (
-                <div>
-                  <ClipLoader color="#e57226" size={50} loading={loading} />
-                </div>
-              ) : uniqueNumbers.length > 0 ? (
-                uniqueNumbers.map((num, index) => (
-                  <li
-                    key={index}
-                    className="p-2 bg-gray-100 rounded flex items-center justify-between"
-                  >
-                    {num.uniqueNumber}{" "}
-                    <RiDeleteBinLine
-                      size={25}
-                      color="red"
-                      onClick={() => confirmDelete(num._id)}
-                    />
-                  </li>
-                ))
-              ) : (
-                <p>No unique numbers found.</p>
-              )}
-            </ul>
-          </div>
+          {loading ? (
+            <div className="flex justify-center items-center h-40">
+              <Spin size="large" className="custom-spinner" />
+            </div>
+          ) : uniqueNumbers.length > 0 ? (
+            <Table
+              columns={columns}
+              dataSource={uniqueNumbers}
+              rowKey="_id"
+              pagination={{ pageSize: 5 }}
+            />
+          ) : (
+            <p>No unique numbers found.</p>
+          )}
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
       <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onProceed={handleDeleteConfirm}
-        title="Are you sure you want to delete this candidate?"
-      />
+        title="Confirm Deletion"
+        open={isModalOpen}
+        onOk={handleDeleteConfirm}
+        confirmLoading={confirmLoading}
+        onCancel={() => setIsModalOpen(false)}
+        okText="Delete"
+        cancelText="Cancel"
+        okButtonProps={{
+          danger: true,
+          style: { backgroundColor: "#e57226", borderColor: "#e57226" },
+        }}
+      >
+        <p>Are you sure you want to delete this unique number?</p>
+      </Modal>
     </div>
   );
 };

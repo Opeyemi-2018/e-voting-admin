@@ -10,8 +10,8 @@ import { CiSettings } from "react-icons/ci";
 import axios from "axios";
 import { useAuth } from "@/app/context/authContext";
 import { ToastContainer, toast } from "react-toastify";
+import { Modal, Button } from "antd";
 import "react-toastify/dist/ReactToastify.css";
-import Modal from "@/app/components/modals/";
 import { useState } from "react";
 
 const Sidebar = () => {
@@ -62,8 +62,9 @@ const Sidebar = () => {
     },
     { id: 5, name: "setting", icon: <CiSettings />, path: "/admin/setting" },
   ];
+
   return (
-    <div className=" h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#e57226]">
+    <div className="h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#e57226]">
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -93,18 +94,26 @@ const Sidebar = () => {
       </div>
       <div
         onClick={handleSignOut}
-        className="flex items-center gap-3  text-white capitalize cursor-pointer hover:bg-[#443227] hover:text-white px-4 p-2 rounded-md transition-all duration-300 delay-150"
+        className="flex items-center gap-3 text-white capitalize cursor-pointer hover:bg-[#443227] hover:text-white px-4 p-2 rounded-md transition-all duration-300 delay-150"
       >
         <PiSignOut className="text-2xl" />
         <button>sign out</button>
       </div>
 
+      {/* Ant Design Modal for Sign Out Confirmation */}
       <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onProceed={confirmSignOut}
         title="Are you sure you want to sign out?"
-      />
+        open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        onOk={confirmSignOut}
+        okText="Sign Out"
+        cancelText="Cancel"
+        okButtonProps={{
+          style: { backgroundColor: "#e57226", borderColor: "#e57226" },
+        }}
+      >
+        <p>By signing out, you'll be logged out of your account.</p>
+      </Modal>
     </div>
   );
 };

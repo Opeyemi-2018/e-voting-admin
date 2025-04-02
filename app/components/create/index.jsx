@@ -1,14 +1,16 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
-import Modal from "@/app/components/modals";
+import { Modal, Button } from "antd";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const CreateVote = () => {
   const [candidates, setCandidates] = useState([]);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ const CreateVote = () => {
   };
 
   const handleConfirmSubmit = async () => {
+    setConfirmLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/candidate/create-candidate",
@@ -34,14 +37,10 @@ const CreateVote = () => {
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add candidate.");
+    } finally {
+      setConfirmLoading(false);
+      setModalOpen(false);
     }
-
-    setModalOpen(false);
-  };
-
-  const handleCancelSubmit = () => {
-    toast.info("Candidate submission cancelled.");
-    setModalOpen(false);
   };
 
   return (
@@ -52,15 +51,15 @@ const CreateVote = () => {
         toastClassName="w-[200px] text-center"
       />
       <div className="bg-white p-10 shadow-lg rounded-lg max-w-[700px]">
-        <h1 className="font-semibold  capitalize mb-4">Candidates</h1>
-        <form onSubmit={handleSubmit} className="mb-4  flex flex-col gap-4">
-          <div className="flex  md:flex-row flex-col gap-2">
+        <h1 className="font-semibold capitalize mb-4">Candidates</h1>
+        <form onSubmit={handleSubmit} className="mb-4 flex flex-col gap-4">
+          <div className="flex md:flex-row flex-col gap-2">
             <input
               type="text"
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className=" w-full border border-gray-300 outline-none p-2 rounded mr-2"
+              className="w-full border border-gray-300 outline-none p-2 rounded mr-2"
             />
             <input
               type="text"
@@ -76,39 +75,26 @@ const CreateVote = () => {
           >
             Add Candidate
           </button>
-
-          <Modal
-            isOpen={modalOpen}
-            onClose={handleCancelSubmit}
-            onProceed={handleConfirmSubmit}
-            title="Confirm Candidate Submission"
-            bodyText={`Are you sure you want to add "${name}" under "${category}"?`}
-          />
         </form>
       </div>
 
-      {/* <ul>
-        {candidates.map((candidate) => (
-          <li key={candidate._id} className="border p-2 mb-2 rounded">
-            <h2 className="font-semibold">
-            {candidate.name} ({candidate.category})
-            </h2>
-            <p>Votes: {candidate.votes}</p>
-            <button
-            onClick={() => handleVote(candidate._id)}
-            className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-            >
-            Vote
-            </button>
-            <button
-            onClick={() => handleDelete(candidate._id)}
-              className="bg-red-500 text-white px-2 py-1 rounded"
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul> */}
+      {/* Ant Design Modal for Confirmation */}
+      <Modal
+        title="Confirm Candidate Creation"
+        open={modalOpen}
+        onOk={handleConfirmSubmit}
+        confirmLoading={confirmLoading}
+        onCancel={() => setModalOpen(false)}
+        okText="Confirm"
+        cancelText="Cancel"
+        okButtonProps={{
+          style: { backgroundColor: "#e57226", borderColor: "#e57226" },
+        }}
+      >
+        <p>Are you sure you want to add this candidate?</p>
+        <p><strong>Name:</strong> {name}</p>
+        <p><strong>Category:</strong> {category}</p>
+      </Modal>
     </div>
   );
 };

@@ -1,2 +1,7 @@
 @import "tailwindcss";
 
+.custom-spinner .ant-spin-dot i {
+    background-color: #e57226 !important;
+  }
+  
+
