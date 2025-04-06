@@ -20,7 +20,9 @@ const ManageVote = () => {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/candidate/get-candidate");
+        const res = await axios.get(
+          "http://localhost:5000/api/candidate/get-candidate"
+        );
         setCandidates(res.data);
       } catch (error) {
         toast.error(error.response?.data?.msg || "Failed to fetch candidates");
@@ -42,8 +44,12 @@ const ManageVote = () => {
 
     setConfirmLoading(true);
     try {
-      await axios.delete(`http://localhost:5000/api/candidate/delete-candidate/${selectedCandidate._id}`);
-      setCandidates((prev) => prev.filter((candidate) => candidate._id !== selectedCandidate._id));
+      await axios.delete(
+        `http://localhost:5000/api/candidate/delete-candidate/${selectedCandidate._id}`
+      );
+      setCandidates((prev) =>
+        prev.filter((candidate) => candidate._id !== selectedCandidate._id)
+      );
       toast.success("Candidate deleted successfully");
     } catch (error) {
       toast.error(error.response?.data?.msg || "Failed to delete candidate");
@@ -75,7 +81,12 @@ const ManageVote = () => {
       title: "Action",
       key: "action",
       render: (_, record) => (
-        <Button type="primary" danger onClick={() => handleDeleteClick(record)} icon={<RiDeleteBinLine size={18} />} />
+        <Button
+          type="primary"
+          danger
+          onClick={() => handleDeleteClick(record)}
+          icon={<RiDeleteBinLine size={18} />}
+        />
       ),
     },
   ];
@@ -87,11 +98,13 @@ const ManageVote = () => {
       <ToastContainer />
 
       <div className="py-6 mt-8">
-        <div className="flex lg:flex-row flex-col md:gap-2 gap-4">
+        <div className="flex  flex-col md:gap-2 gap-4">
           <div className="w-full">
-            <div className="max-w-[800px]">
+            <div className="">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-semibold capitalize">Candidates</h2>
+                <h2 className="text-2xl font-semibold capitalize">
+                  Candidates
+                </h2>
                 <div className="flex gap-4">
                   <Button type="primary">Filter by</Button>
                   <Button type="default" icon={<RiResetLeftLine />}>
@@ -102,10 +115,15 @@ const ManageVote = () => {
 
               {loading ? (
                 <div className="flex justify-center items-center h-40">
-                  <Spin size="large"  className="custom-spinner"/>
+                  <Spin size="large" className="custom-spinner" />
                 </div>
               ) : (
-                <Table columns={columns} dataSource={candidates} rowKey="_id" pagination={{ pageSize: 5 }} />
+                <Table
+                  columns={columns}
+                  dataSource={candidates}
+                  rowKey="_id"
+                  pagination={{ pageSize: 5 }}
+                />
               )}
             </div>
           </div>

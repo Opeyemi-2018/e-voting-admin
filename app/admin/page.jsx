@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/navbar";
 import Overview from "../components/overview";
+import LiveResultsChart from "../components/result-chart";
 
 const page = () => {
   return (
@@ -8,6 +9,7 @@ const page = () => {
       <Navbar title="Overview" />
 
       <Overview/>
+      <LiveResultsChart/>
     </div>
   );
 };
