@@ -46,7 +46,6 @@ const page = () => {
               >
                 <div className="w-52 h-52 overflow-hidden rounded-sm">
                   {" "}
-                  {/* Container for fixed size */}
                   <img
                     src={`http://localhost:5000${candidate.image}`}
                     className="w-full h-full object-cover"
