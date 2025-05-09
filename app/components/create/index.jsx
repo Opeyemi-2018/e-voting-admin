@@ -9,7 +9,7 @@ const CreateVote = () => {
   const [candidates, setCandidates] = useState([]);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("President");
-  const [image, setImage] = useState(null); // New state for image
+  const [image, setImage] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -35,7 +35,7 @@ const CreateVote = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/candidate/create-candidate",
+        "https://e-voting-server-bxpt.onrender.com/api/candidate/create-candidate",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

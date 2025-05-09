@@ -21,7 +21,7 @@ const ManageVote = () => {
     const fetchCandidates = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/candidate/get-candidate"
+          "https://e-voting-server-bxpt.onrender.com/api/candidate/get-candidate"
         );
         setCandidates(res.data);
       } catch (error) {
@@ -45,7 +45,7 @@ const ManageVote = () => {
     setConfirmLoading(true);
     try {
       await axios.delete(
-        `http://localhost:5000/api/candidate/delete-candidate/${selectedCandidate._id}`
+        `https://e-voting-server-bxpt.onrender.com/api/candidate/delete-candidate/${selectedCandidate._id}`
       );
       setCandidates((prev) =>
         prev.filter((candidate) => candidate._id !== selectedCandidate._id)

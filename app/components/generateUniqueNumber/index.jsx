@@ -52,7 +52,7 @@ const UniqueNumber = () => {
     setConfirmLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/unique-number/generate-unique-number",
+        "https://e-voting-server-bxpt.onrender.com/api/unique-number/generate-unique-number",
         { uniqueNumbers: numbersList }
       );
 

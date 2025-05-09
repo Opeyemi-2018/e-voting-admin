@@ -4,14 +4,16 @@ import { useState, useEffect, createContext, useContext } from "react";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);  
+  const [user, setUser] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const toggleSideBar = () => setSidebarOpen((prev) => !prev);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
         const userData = JSON.parse(storedUser);
-        setUser(userData); // Store the parsed user data directly
+        setUser(userData);
       } catch (error) {
         console.error("Error parsing user data:", error);
       }
@@ -29,10 +31,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, toggleSideBar, sidebarOpen }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 export const useAuth = () => useContext(AuthContext);
-

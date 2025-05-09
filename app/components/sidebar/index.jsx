@@ -15,6 +15,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 
 const Sidebar = () => {
+  const { toggleSideBar } = useAuth();
+
   const pathName = usePathname();
   const router = useRouter();
   const { logout } = useAuth();
@@ -64,7 +66,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#e57226]">
+    <div className="h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#b72522]">
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -80,7 +82,10 @@ const Sidebar = () => {
           {routes.map((route) => (
             <li
               key={route.id}
-              onClick={() => router.push(route.path)}
+              onClick={() => {
+                router.push(route.path);
+                toggleSideBar();
+              }}
               className={`${
                 pathName === route.path
                   ? "bg-white text-[#443227]"
@@ -109,8 +114,8 @@ const Sidebar = () => {
         okText="Sign Out"
         cancelText="Cancel"
         okButtonProps={{
-          style: { backgroundColor: "#e57226", borderColor: "#e57226" },
-        }}
+          style: { backgroundColor: "#443227" },
+        }} 
       >
         <p>By signing out, you'll be logged out of your account.</p>
       </Modal>

@@ -6,8 +6,9 @@ import { useAuth } from "@/app/context/authContext";
 import { useState } from "react";
 
 const Navbar = ({ title }) => {
-  const { user } = useAuth();
+  const { user, toggleSideBar } = useAuth();
   const [showSignOut, setShowSignOut] = useState(false);
+
   return (
     <>
       <div className="flex justify-between items-center">
@@ -29,7 +30,11 @@ const Navbar = ({ title }) => {
           <IoMdArrowDropdown size={30} className="hidden md:block  " />
         </div>
 
-        <FiMenu size={25} className="lg:hidden block " />
+        <FiMenu
+          onClick={toggleSideBar}
+          size={30}
+          className="lg:hidden block "
+        />
       </div>
     </>
   );

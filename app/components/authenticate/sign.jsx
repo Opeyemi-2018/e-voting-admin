@@ -33,8 +33,9 @@ const SignIn = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:5000/api/auth/sign-up",
-        formData
+        "https://e-voting-server-bxpt.onrender.com/api/auth/sign-up",
+        formData,
+        { withCredentials: true }
       );
       toast.success(res.data.msg);
       setShowSignIn(true);
@@ -57,8 +58,9 @@ const SignIn = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:5000/api/auth/sign-in",
-        formData
+        "https://e-voting-server-bxpt.onrender.com/api/auth/sign-in",
+        formData,
+        { withCredentials: true }
       );
       const { token, user } = res.data;
       login({ token, user });
@@ -109,7 +111,7 @@ const SignIn = () => {
               </div>
               <button
                 onClick={handleSignIn}
-                className="bg-[#e57226] uppercase text-white p-3 rounded-md w-full"
+                className="bg-[#b72522] uppercase text-white p-3 rounded-md w-full"
               >
                 {loading ? (
                   <div className="spinner  flex items-center justify-center">
@@ -124,7 +126,7 @@ const SignIn = () => {
                 <button
                   type="button"
                   onClick={() => setShowSignIn(!showSignIn)}
-                  className="text-[#e57226]"
+                  className="text-[#b72522]"
                 >
                   Sign Up
                 </button>{" "}
@@ -175,7 +177,7 @@ const SignIn = () => {
 
               <button
                 onClick={handleSignUp}
-                className="bg-[#e57226] uppercase text-white p-3 rounded-md w-full"
+                className="bg-[#b72522] uppercase text-white p-3 rounded-md w-full"
               >
                 {loading ? (
                   <div className="spinner  flex items-center justify-center">
@@ -189,7 +191,7 @@ const SignIn = () => {
                 already have an account{" "}
                 <button
                   onClick={() => setShowSignIn(!showSignIn)}
-                  className="text-[#e57226]"
+                  className="text-[#b72522]"
                 >
                   sign in
                 </button>{" "}

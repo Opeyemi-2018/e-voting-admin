@@ -41,20 +41,25 @@ const page = () => {
           <div className="grid gap-6 md:grid-cols-3 grid-cols-1 my-10">
             {candidates.map((candidate) => (
               <div
-                className="flex items-center gap-6 border rounded-md border-[#e57226]"
+                className="flex items-center gap-4 p-3 rounded-md border border-[#e57226] bg-white shadow-sm hover:shadow-md transition-all duration-300"
                 key={candidate._id}
               >
-                <div className="w-52 h-52 overflow-hidden rounded-sm">
-                  {" "}
+                <div className="w-20 h-20 overflow-hidden rounded border border-[#e57226]">
                   <img
                     src={`http://localhost:5000${candidate.image}`}
                     className="w-full h-full object-cover"
                     alt={candidate.name}
                   />
                 </div>
-                <div className="flex items-center flex-col gap-3 text-3xl font-semibold pr-4">
-                  <h1>{candidate.name}</h1>
-                  <h1 className="">{candidate.votes}</h1>
+
+                <div className="flex flex-col justify-center gap-1 text-[#333]">
+                  <h1 className="text-base font-semibold text-[#e57226]">
+                    {candidate.name}
+                  </h1>
+                  <span className="text-sm font-medium">
+                    Votes:{" "}
+                    <span className="text-[#e57226]">{candidate.votes}</span>
+                  </span>
                 </div>
               </div>
             ))}

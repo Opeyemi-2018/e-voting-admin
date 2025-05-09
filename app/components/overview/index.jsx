@@ -14,7 +14,7 @@ const Overview = () => {
     const fetchCount = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/unique-number/get-unique-number"
+          "https://e-voting-server-bxpt.onrender.com/api/unique-number/get-unique-number"
         );
         setCount(response.data.count);
       } catch (error) {
@@ -31,7 +31,7 @@ const Overview = () => {
     const fetchCandidates = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/candidate/get-candidate"
+          "https://e-voting-server-bxpt.onrender.com/api/candidate/get-candidate"
         );
         setcandidateNumber(res.data);
       } catch (error) {
@@ -49,7 +49,7 @@ const Overview = () => {
     const fetchUsedNumbers = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/unique-number/used-unique-number"
+          "https://e-voting-server-bxpt.onrender.com/api/unique-number/used-unique-number"
         );
         // setUsedNumbers(res.data.usedNumbers);
         setUsedNumber(res.data.usedNum);
@@ -73,7 +73,7 @@ const Overview = () => {
             <p className="text-wrap">Total Registered Student</p>
             <IoPeopleOutline
               size={25}
-              className="bg-[#f8f6f4] p-1 rounded-full text-[#e57226]"
+              className="bg-[#e1dfd3] p-1 rounded-full text-[#b72522]"
             />
           </div>
           <p className="font-semibold text-2xl"> {count}</p>
@@ -83,7 +83,7 @@ const Overview = () => {
             <p className="text-wrap">Total Registered candidate</p>
             <IoPeopleOutline
               size={25}
-              className="bg-[#f8f6f4] p-1 rounded-full text-[#e57226]"
+              className="bg-[#e1dfd3] p-1 rounded-full text-[#b72522]"
             />
           </div>
           <p className="font-semibold text-2xl">{candidateNumber.length}</p>
@@ -93,7 +93,7 @@ const Overview = () => {
             <p>Total Voters</p>
             <IoPeopleOutline
               size={25}
-              className="bg-[#f8f6f4] p-1 rounded-full text-[#e57226]"
+              className="bg-[#e1dfd3] p-1 rounded-full text-[#b72522]"
             />
           </div>
           <p className="font-semibold text-2xl">{usedNumber}</p>
@@ -103,7 +103,7 @@ const Overview = () => {
             <p className="text-wrap">Total Non-Voters</p>
             <IoPeopleOutline
               size={25}
-              className="bg-[#f8f6f4] p-1 rounded-full text-[#e57226]"
+              className="bg-[#e1dfd3] p-1 rounded-full text-[#b72522]"
             />
           </div>
           <p className="font-semibold text-2xl">{unusedNumber}</p>

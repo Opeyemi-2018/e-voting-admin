@@ -1,17 +1,33 @@
-import Sidebar from "../components/sidebar"
+"use client";
+import Sidebar from "../components/sidebar";
+import { useAuth } from "../context/authContext";
 
-
-const AdminLayout = ({children}) => {
+const AdminLayout = ({ children }) => {
+  const { sidebarOpen, toggleSideBar } = useAuth();
   return (
     <section className=" mx-auto h-screen">
+      <div
+        className={`fixed top-0 left-0 z-50 h-full w-[250px] bg-white transform transition-transform duration-300 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:hidden`}
+      >
+        <Sidebar />
+      </div>
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-gray-800 bg-opacity-30 lg:hidden"
+          onClick={toggleSideBar}
+        ></div>
+      )}
+
       <div className="hidden lg:block">
         <Sidebar />
       </div>
-      <div className=" xl:pl-[290px] min-h-screen lg:pl-[274px] lg:pr-6 xl:pr-10 lg:pt-[29px] md:p-6 p-4 bg-[#f8f6f4]">
+      <div className=" xl:pl-[290px] min-h-screen lg:pl-[274px] lg:pr-6 xl:pr-10 lg:pt-[29px] md:p-6 p-4 bg-[#e1dfd3]">
         {children}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default AdminLayout
+export default AdminLayout;
