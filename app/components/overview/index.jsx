@@ -68,7 +68,7 @@ const Overview = () => {
   return (
     <div>
       <div className="flex items-center gap-4 overflow-auto mt-6">
-        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] bg-white shadow-lg flex flex-col justify-between gap-[10px] min-h-[115px]  ">
+        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] bg-white shadow-lg flex flex-col justify-between gap-[10px] h-[140px]  ">
           <div className="flex items-center text-[#443227] justify-between">
             <p className="text-wrap">Total Registered Student</p>
             <IoPeopleOutline
@@ -78,7 +78,7 @@ const Overview = () => {
           </div>
           <p className="font-semibold text-2xl"> {count}</p>
         </div>
-        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] shadow-lg bg-white flex flex-col justify-between gap-[10px] min-h-[115px]  ">
+        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] shadow-lg bg-white flex flex-col justify-between gap-[10px] h-[140px]  ">
           <div className="flex items-center text-[#443227] justify-between">
             <p className="text-wrap">Total Registered candidate</p>
             <IoPeopleOutline
@@ -88,7 +88,7 @@ const Overview = () => {
           </div>
           <p className="font-semibold text-2xl">{candidateNumber.length}</p>
         </div>
-        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] shadow-lg bg-white flex flex-col justify-between gap-[10px] min-h-[115px]  ">
+        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] shadow-lg bg-white flex flex-col justify-between gap-[10px] h-[140px]  ">
           <div className="flex items-center text-[#443227] justify-between">
             <p>Total Voters</p>
             <IoPeopleOutline
@@ -98,7 +98,7 @@ const Overview = () => {
           </div>
           <p className="font-semibold text-2xl">{usedNumber}</p>
         </div>
-        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] shadow-lg bg-white flex flex-col justify-between gap-[10px] min-h-[115px]  ">
+        <div className="w-full text-nowrap min-w-[188px] p-4 rounded-[10px] shadow-lg bg-white flex flex-col justify-between gap-[10px] h-[140px]  ">
           <div className="flex items-center text-[#443227] justify-between">
             <p className="text-wrap">Total Non-Voters</p>
             <IoPeopleOutline
