@@ -76,7 +76,7 @@ const UniqueNumber = () => {
       <ToastContainer position="top-center" autoClose={3000} />
       <div className="bg-white p-10 shadow-lg rounded-lg max-w-[700px]">
         <h1 className="font-semibold mb-4 capitalize">Generate Unique Voter ID</h1>
-        <div className="flex gap-2 mb-4">
+        <div className="flex md:flex-row flex-col md:gap-2 gap-3 mb-4">
           <input
             type="text"
             placeholder="Enter CSC number (e.g., CSC1)"

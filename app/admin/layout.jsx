@@ -15,7 +15,7 @@ const AdminLayout = ({ children }) => {
       </div>
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-gray-800 bg-opacity-30 lg:hidden"
+          className="fixed  lg:hidden"
           onClick={toggleSideBar}
         ></div>
       )}
