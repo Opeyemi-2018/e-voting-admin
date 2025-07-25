@@ -7,8 +7,7 @@ import { Table, Button, Modal, Spin, Select } from "antd";
 import { RiDeleteBinLine, RiResetLeftLine } from "react-icons/ri";
 import Navbar from "@/app/components/navbar";
 import Overview from "@/app/components/overview";
-import GetUniqueNumber from "@/app/components/getUniqueNumber";
-
+import GetAllStudents from "@/app/components/getUniqueNumber";
 const { Option } = Select;
 
 const ManageVote = () => {
@@ -167,7 +166,7 @@ const ManageVote = () => {
             )}
           </div>
 
-          <GetUniqueNumber />
+          <GetAllStudents />
         </div>
       </div>
 

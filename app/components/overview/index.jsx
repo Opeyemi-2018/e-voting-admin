@@ -14,7 +14,8 @@ const Overview = () => {
     const fetchCount = async () => {
       try {
         const response = await axios.get(
-          "https://e-voting-server-bxpt.onrender.com/api/unique-number/get-unique-number"
+          // "https://e-voting-server-bxpt.onrender.com/api/unique-number/get-unique-number"
+          "http://localhost:5000/api/student-auth/students"
         );
         setCount(response.data.count);
       } catch (error) {
@@ -31,7 +32,8 @@ const Overview = () => {
     const fetchCandidates = async () => {
       try {
         const res = await axios.get(
-          "https://e-voting-server-bxpt.onrender.com/api/candidate/get-candidate"
+          // "https://e-voting-server-bxpt.onrender.com/api/candidate/get-candidate"
+          "http://localhost:5000/api/candidate/get-candidate"
         );
         setcandidateNumber(res.data);
       } catch (error) {
@@ -49,11 +51,12 @@ const Overview = () => {
     const fetchUsedNumbers = async () => {
       try {
         const res = await axios.get(
-          "https://e-voting-server-bxpt.onrender.com/api/unique-number/used-unique-number"
+          // "https://e-voting-server-bxpt.onrender.com/api/unique-number/used-unique-number"
+          "http://localhost:5000/api/student-auth/voted-students"
         );
         // setUsedNumbers(res.data.usedNumbers);
-        setUsedNumber(res.data.usedNum);
-        setUnUsedNumber(res.data.unUsedNum);
+        setUsedNumber(res.data.votedCount);
+        setUnUsedNumber(res.data.votedNonCount);
       } catch (err) {
         console.error(err);
         setError("Failed to load used numbers");

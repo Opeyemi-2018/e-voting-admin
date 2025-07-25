@@ -10,9 +10,6 @@ const Page = () => {
         <div className="">
           <CreateVote />
         </div>
-        <div className="">
-          <UniqueNumber />
-        </div>
       </div>
     </div>
   );

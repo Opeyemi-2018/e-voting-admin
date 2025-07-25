@@ -33,7 +33,7 @@ const SignIn = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://e-voting-server-bxpt.onrender.com/api/auth/sign-up",
+        "https://e-voting-server-bxpt.onrender.com/api/admin-auth/sign-up",
         formData,
         { withCredentials: true }
       );
@@ -58,7 +58,8 @@ const SignIn = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://e-voting-server-bxpt.onrender.com/api/auth/sign-in",
+        // "https://e-voting-server-bxpt.onrender.com/api/admin-auth/sign-in",
+        "http://localhost:5000/api/admin-auth/sign-in",
         formData,
         { withCredentials: true }
       );
@@ -68,7 +69,7 @@ const SignIn = () => {
       router.push("/admin");
     } catch (error) {
       console.log(error.response?.data);
-      toast.error(error.response?.data?.msg || "sign in failed");
+      toast.error(error.response?.data?.message || "sign in failed");
     } finally {
       setLoading(false);
     }
