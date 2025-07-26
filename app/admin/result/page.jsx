@@ -6,8 +6,7 @@ import { ClipLoader } from "react-spinners";
 import axios from "axios";
 import { Table, Button } from "antd"; // Keep Button and Table if you want to retain Ant Design for these
 import { RiResetLeftLine } from "react-icons/ri";
-import "antd/dist/reset.css"; // Keep this if you're using other Ant Design components like Table or Button
-
+import "antd/dist/reset.css";
 const page = () => {
   const [candidates, setCandidates] = useState([]);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
@@ -32,9 +31,7 @@ const page = () => {
         setCandidates(res.data);
         setFilteredCandidates(res.data);
       } catch (error) {
-        // Make sure 'toast' is defined or import it if you're using it
-        // toast.error(error.response?.data?.msg || "Failed to fetch candidates");
-        console.error("Failed to fetch candidates:", error); // Fallback to console error
+        console.error("Failed to fetch candidates:", error);
       } finally {
         setLoading(false);
       }
@@ -43,12 +40,11 @@ const page = () => {
     fetchCandidates();
   }, []);
 
-  // Handle change for the new select element
   const handleCategoryChange = (event) => {
     const category = event.target.value;
     setSelectedCategory(category);
     if (category === "") {
-      setFilteredCandidates(candidates); // Show all if "Filter Results" or default is selected
+      setFilteredCandidates(candidates);
     } else {
       const filtered = candidates.filter((c) => c.category === category);
       setFilteredCandidates(filtered);
@@ -57,7 +53,7 @@ const page = () => {
 
   const handleReset = () => {
     setFilteredCandidates(candidates);
-    setSelectedCategory(""); 
+    setSelectedCategory("");
   };
 
   const columns = [
@@ -67,12 +63,13 @@ const page = () => {
       key: "image",
       render: (image) => (
         <img
-          src={`http://localhost:5000${image}`}
+          src={image} 
           alt="candidate"
           className="rounded-full w-10 h-10 object-cover border border-[#443227]"
         />
       ),
     },
+
     {
       title: "Name",
       dataIndex: "name",
@@ -82,7 +79,7 @@ const page = () => {
       ),
     },
     {
-      title: "Category", // Changed 'category' to 'Category' for better display
+      title: "Category",
       dataIndex: "category",
       key: "category",
       render: (category) => (

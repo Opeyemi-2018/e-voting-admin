@@ -5,7 +5,7 @@ import { useAuth } from "../context/authContext";
 const AdminLayout = ({ children }) => {
   const { sidebarOpen, toggleSideBar } = useAuth();
   return (
-    <section className=" mx-auto h-screen">
+    <section className=" mx-auto h-screen max-w-[90rem] ">
       <div
         className={`fixed top-0 left-0 z-50 h-full w-[250px] bg-white transform transition-transform duration-300 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"

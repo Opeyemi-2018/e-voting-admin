@@ -9,17 +9,29 @@ const CreateVote = () => {
   const [candidates, setCandidates] = useState([]);
   const [name, setName] = useState("");
   const [category, setCategory] = useState("President");
-  const [image, setImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null); // actual File
+  const [imagePreview, setImagePreview] = useState(null); // for preview
+  const [base64Image, setBase64Image] = useState(""); // base64 string for backend
   const [modalOpen, setModalOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setImageFile(file);
+    setImagePreview(URL.createObjectURL(file));
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setBase64Image(reader.result);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name.trim() || !image) {
+    if (!name.trim() || !base64Image) {
       toast.error("Name and image are required.");
       return;
     }
@@ -28,17 +40,19 @@ const CreateVote = () => {
 
   const handleConfirmSubmit = async () => {
     setConfirmLoading(true);
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("category", category);
-    formData.append("image", image);
 
     try {
+      const payload = {
+        name,
+        category,
+        image: base64Image,
+      };
+
       const response = await axios.post(
-        "https://e-voting-server-bxpt.onrender.com/api/candidate/create-candidate",
-        formData,
+        "http://localhost:5000/api/candidate/create-candidate",
+        payload,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "application/json" },
         }
       );
 
@@ -47,7 +61,9 @@ const CreateVote = () => {
         setCandidates([...candidates, response.data.candidate]);
         setName("");
         setCategory("President");
-        setImage(null);
+        setImageFile(null);
+        setImagePreview(null);
+        setBase64Image("");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add candidate.");
@@ -59,7 +75,11 @@ const CreateVote = () => {
 
   return (
     <div>
-      <ToastContainer position="top-center" autoClose={3000} toastClassName="w-[200px] text-center" />
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        toastClassName="w-[200px] text-center"
+      />
       <div className="bg-white p-10 shadow-lg rounded-lg max-w-[700px]">
         <h1 className="font-semibold capitalize mb-4">Candidates</h1>
         <form onSubmit={handleSubmit} className="mb-4 flex flex-col gap-4">
@@ -79,7 +99,9 @@ const CreateVote = () => {
               <option value="President">President</option>
               <option value="Vice President">Vice President</option>
               <option value="General Secretary">General Secretary</option>
-              <option value="Assistant General Secretary">Assistant General Secretary</option>
+              <option value="Assistant General Secretary">
+                Assistant General Secretary
+              </option>
               <option value="PRO">PRO</option>
             </select>
           </div>
@@ -89,7 +111,10 @@ const CreateVote = () => {
             onChange={handleImageChange}
             className="border border-gray-300 outline-none p-2 rounded"
           />
-          <button type="submit" className="bg-[#443227] hover:bg-[#755947] text-white p-2 rounded">
+          <button
+            type="submit"
+            className="bg-[#443227] hover:bg-[#755947] text-white p-2 rounded"
+          >
             Add Candidate
           </button>
         </form>
@@ -104,15 +129,27 @@ const CreateVote = () => {
         onCancel={() => setModalOpen(false)}
         okText="Confirm"
         cancelText="Cancel"
-        okButtonProps={{ style: { backgroundColor: "#e57226", borderColor: "#e57226" } }}
+        okButtonProps={{
+          style: { backgroundColor: "#e57226", borderColor: "#e57226" },
+        }}
       >
         <p>Are you sure you want to add this candidate?</p>
-        <p><strong>Name:</strong> {name}</p>
-        <p><strong>Category:</strong> {category}</p>
-        {image && (
+        <p>
+          <strong>Name:</strong> {name}
+        </p>
+        <p>
+          <strong>Category:</strong> {category}
+        </p>
+        {imagePreview && (
           <div className="mt-2">
-            <p><strong>Selected Image:</strong></p>
-            <img src={URL.createObjectURL(image)} alt="Candidate Preview" className="w-24 h-24 object-cover mt-2 rounded" />
+            <p>
+              <strong>Selected Image:</strong>
+            </p>
+            <img
+              src={imagePreview}
+              alt="Candidate Preview"
+              className="w-24 h-24 object-cover mt-2 rounded"
+            />
           </div>
         )}
       </Modal>
