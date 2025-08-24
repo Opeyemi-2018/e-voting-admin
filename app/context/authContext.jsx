@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const toggleSideBar = () => setSidebarOpen((prev) => !prev);
+  console.log(sidebarOpen);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -32,9 +33,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout,
-        
-       }}
+      value={{ user, login, logout, sidebarOpen, toggleSideBar }}
     >
       {children}
     </AuthContext.Provider>

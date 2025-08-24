@@ -5,7 +5,6 @@ import { useAuth } from "@/app/context/authContext";
 import { useState } from "react";
 import { LiaTimesSolid } from "react-icons/lia";
 
-
 const Navbar = ({ title }) => {
   const { user, toggleSideBar, sidebarOpen } = useAuth();
   const [showSignOut, setShowSignOut] = useState(false);

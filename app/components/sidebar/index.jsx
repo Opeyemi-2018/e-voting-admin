@@ -14,7 +14,7 @@ import { Modal, Button } from "antd";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 
-const Sidebar = () => {
+const Sidebar = ({ isMobile = false }) => {
   const { toggleSideBar } = useAuth();
 
   const pathName = usePathname();
@@ -62,11 +62,23 @@ const Sidebar = () => {
       icon: <MdOutlineFormatListNumberedRtl />,
       path: "/admin/result",
     },
-    { id: 5, name: "setting", icon: <CiSettings />, path: "/admin/setting" },
+    // { id: 5, name: "setting", icon: <CiSettings />, path: "/admin/setting" },
   ];
 
+  const handleRouteClick = (path) => {
+    router.push(path);
+    // Only close sidebar on mobile
+    if (isMobile) {
+      toggleSideBar();
+    }
+  };
+
   return (
-    <div className="h-screen w-[250px] max-w-[250px] py-14 flex items-center justify-between gap-8 flex-col min-h-full fixed top-0 bg-[#b72522]">
+    <div
+      className={`h-screen w-[250px] max-w-[250px]  flex items-center  gap-8 flex-col  bg-[#b72522] ${
+        isMobile ? "relative" : "fixed top-0"
+      }`}
+    >
       <ToastContainer
         position="top-center"
         autoClose={3000}
@@ -82,10 +94,7 @@ const Sidebar = () => {
           {routes.map((route) => (
             <li
               key={route.id}
-              onClick={() => {
-                router.push(route.path);
-                toggleSideBar();
-              }}
+              onClick={() => handleRouteClick(route.path)}
               className={`${
                 pathName === route.path
                   ? "bg-white text-[#443227]"
@@ -99,7 +108,7 @@ const Sidebar = () => {
       </div>
       <div
         onClick={handleSignOut}
-        className="flex items-center gap-3 text-white capitalize cursor-pointer hover:bg-[#443227] hover:text-white px-4 p-2 rounded-md transition-all duration-300 delay-150"
+        className="flex items-center gap-3 text-white capitalize cursor-pointer hover:bg-[#443227] hover:text-white rounded-md transition-all duration-300 delay-150"
       >
         <PiSignOut className="text-2xl" />
         <button>sign out</button>
@@ -115,7 +124,7 @@ const Sidebar = () => {
         cancelText="Cancel"
         okButtonProps={{
           style: { backgroundColor: "#443227" },
-        }} 
+        }}
       >
         <p>By signing out, you'll be logged out of your account.</p>
       </Modal>
