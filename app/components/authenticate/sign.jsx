@@ -33,7 +33,7 @@ const SignIn = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://e-voting-server-bxpt.onrender.com/api/admin-auth/sign-up",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin-auth/sign-up`,
         formData,
         { withCredentials: true }
       );
@@ -58,8 +58,7 @@ const SignIn = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        // "https://e-voting-server-bxpt.onrender.com/api/admin-auth/sign-in",
-        "http://localhost:5000/api/admin-auth/sign-in",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/admin-auth/sign-in`,
         formData,
         { withCredentials: true }
       );

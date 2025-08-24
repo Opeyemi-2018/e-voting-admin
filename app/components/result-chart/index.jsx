@@ -18,7 +18,8 @@ const LiveResultsChart = () => {
     const fetchCandidates = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/candidate/get-candidate"
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/candidate/get-candidate`,
+          { withCredentials: true }
         );
         setCandidates(res.data);
       } catch (error) {

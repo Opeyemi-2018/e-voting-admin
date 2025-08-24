@@ -51,14 +51,15 @@ const Overview = () => {
     const fetchUsedNumbers = async () => {
       try {
         const res = await axios.get(
-          // "https://e-voting-server-bxpt.onrender.com/api/unique-number/used-unique-number"
-          "http://localhost:5000/api/student-auth/voted-students"
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/student-auth/voted-students`,
+          { withCredentials: true }
         );
+
         // setUsedNumbers(res.data.usedNumbers);
         setUsedNumber(res.data.votedCount);
         setUnUsedNumber(res.data.votedNonCount);
       } catch (err) {
-        console.error(err);
+        console.error(err.response?.data || err.message);
         setError("Failed to load used numbers");
       } finally {
         setLoading(false);

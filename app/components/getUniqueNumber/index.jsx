@@ -11,9 +11,13 @@ const GetAllStudents = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/student-auth/students");
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/student-auth/students`,
+          { withCredentials: true }
+        );
         setStudents(res.data.students);
       } catch (error) {
+        console.error(error.response?.data || error.message);
         toast.error("Failed to fetch students");
       } finally {
         setLoading(false);

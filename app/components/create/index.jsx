@@ -49,7 +49,7 @@ const CreateVote = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/candidate/create-candidate",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/candidate/create-candidate`,
         payload,
         {
           headers: { "Content-Type": "application/json" },

@@ -28,7 +28,10 @@ const Sidebar = ({ isMobile = false }) => {
 
   const confirmSignOut = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/auth/sign-out");
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/sign-out`,
+        { withCredentials: true }
+      );
       if (res.status === 200) {
         logout();
         router.push("/");

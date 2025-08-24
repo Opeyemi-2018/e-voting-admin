@@ -19,16 +19,17 @@ const ManageVote = () => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState("");
 
- 
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
         const res = await axios.get(
-          "https://e-voting-server-bxpt.onrender.com/api/candidate/get-candidate"
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/candidate/get-candidate`,
+          { withCredentials: true }
         );
         setCandidates(res.data);
-        setFilteredCandidates(res.data); 
+        setFilteredCandidates(res.data);
       } catch (error) {
+        console.error(error.response?.data || error.message);
         toast.error(error.response?.data?.msg || "Failed to fetch candidates");
       } finally {
         setLoading(false);
@@ -46,21 +47,27 @@ const ManageVote = () => {
   const handleDeleteConfirm = async () => {
     if (!selectedCandidate) return;
     setConfirmLoading(true);
+
     try {
       await axios.delete(
-        `https://e-voting-server-bxpt.onrender.com/api/candidate/delete-candidate/${selectedCandidate._id}`
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/candidate/delete-candidate/${selectedCandidate._id}`,
+        { withCredentials: true }
       );
+
       const updated = candidates.filter(
         (candidate) => candidate._id !== selectedCandidate._id
       );
+
       setCandidates(updated);
       setFilteredCandidates(
         categoryFilter
           ? updated.filter((c) => c.category === categoryFilter)
           : updated
       );
+
       toast.success("Candidate deleted successfully");
     } catch (error) {
+      console.error(error.response?.data || error.message);
       toast.error(error.response?.data?.msg || "Failed to delete candidate");
     } finally {
       setConfirmLoading(false);

@@ -4,14 +4,14 @@ import Overview from "@/app/components/overview";
 import { useState, useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import axios from "axios";
-import { Table, Button } from "antd"; // Keep Button and Table if you want to retain Ant Design for these
+import { Table, Button } from "antd"; 
 import { RiResetLeftLine } from "react-icons/ri";
 import "antd/dist/reset.css";
 const page = () => {
   const [candidates, setCandidates] = useState([]);
   const [filteredCandidates, setFilteredCandidates] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(""); // Change to empty string for select default
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const categories = [
     "President",
@@ -26,12 +26,17 @@ const page = () => {
       try {
         setLoading(true);
         const res = await axios.get(
-          "http://localhost:5000/api/candidate/get-candidate"
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/candidate/get-candidate`,
+          { withCredentials: true }
         );
         setCandidates(res.data);
         setFilteredCandidates(res.data);
       } catch (error) {
-        console.error("Failed to fetch candidates:", error);
+        console.error(
+          "Failed to fetch candidates:",
+          error.response?.data || error.message
+        );
+        toast.error("Failed to fetch candidates");
       } finally {
         setLoading(false);
       }
@@ -63,7 +68,7 @@ const page = () => {
       key: "image",
       render: (image) => (
         <img
-          src={image} 
+          src={image}
           alt="candidate"
           className="rounded-full w-10 h-10 object-cover border border-[#443227]"
         />
@@ -132,14 +137,6 @@ const page = () => {
               >
                 Reset
               </Button>
-              {/* If you wanted a purely native HTML button for reset: */}
-              {/* <button
-                onClick={handleReset}
-                className="p-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 hover:bg-gray-200 flex items-center gap-2 text-[#443227]"
-              >
-                <RiResetLeftLine />
-                Reset
-              </button> */}
             </div>
 
             <Table
